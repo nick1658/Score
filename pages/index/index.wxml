@@ -1,0 +1,40 @@
+
+<view class="container">
+  <view class="panel-display" style="position: relative;">
+    <view class="panel-btns">
+      <view class="btns-rows">
+        <view class="btn {{tapped['id']}}" bindtap="getScorelogs" bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="id">id</view>
+        <view class="btn {{tapped['6']}}" bindtap="btnClicked" bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="6">6</view>
+        <view class="btn {{tapped['7']}}" bindtap="btnClicked" bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="7">7</view>
+        <view class="btn {{tapped['8']}}" bindtap="btnClicked" bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="8">8</view>
+        <view class="btn {{tapped['9']}}" bindtap="btnClicked" bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="9">9</view>
+        
+      </view>
+    </view>
+    <view>
+      <text> </text>
+    </view>
+    <scroll-view scroll-y="true" style="height: 825rpx;">
+      <block wx:for="{{scoreArray}}" wx:key="unique"> 
+        <view class="btns-rows">
+            <view class="score">{{item.id}}</view>
+            <view class="score">{{item.P1}}</view>
+            <view class="score">{{item.P2}}</view>
+            <view class="score">{{item.P3}}</view>
+            <view class="score">{{item.P4}}</view>
+        </view>
+      </block>
+    </scroll-view>
+    <view class="section">
+      <view class="weui-cells__title">本局得分详情</view>
+        <picker mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
+        <view class="picker">
+          当前选择：{{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}，{{multiArray[2][multiIndex[2]]}}，{{multiArray[3][multiIndex[3]]}}
+        </view>
+        </picker>
+      </view>
+    <view>
+      <button type="primary" plain="true" bindtap="btnClicked">add new line</button>
+    </view>
+  </view>
+</view>

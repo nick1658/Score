@@ -1,0 +1,67 @@
+
+@import "../common/lib/weui.wxss";
+
+.container{
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #f1f3f3;
+}
+
+.panel-display{
+  width: 100%;
+  flex: 1;
+}
+.panel-btns{
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+
+.btns-rows{
+  width: 100%;
+  flex: 1;
+  display: flex;
+  flex-direction: row;
+  background-color: #f7f8f9;
+}
+
+.btn{
+  text-align: center;
+  box-sizing: border-box;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid #c3c6c7;
+}
+
+.btn.active{
+  background-color: #e3e4e5;
+}
+
+.btn:not(:last-child){
+  border-right: 1px solid #c3c6c7;
+}
+
+.score{
+  text-align: center;
+  box-sizing: border-box;
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-top: 1px solid #c3c6c7;
+}
+.score:not(:last-child){
+  border-right: 1px solid #c3c6c7;
+}
+
+.picker{
+  padding: 19rpx 26rpx;
+  background-color: #FFFFFF;
+}
