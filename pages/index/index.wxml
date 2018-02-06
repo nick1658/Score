@@ -15,10 +15,10 @@
       <block wx:for="{{scoreArray}}" wx:key="unique"> 
         <view class="btns-rows">
             <view class="score">{{item.id}}</view>
-            <view class="score">({{scoreArray[index].P1}}){{scoreArrayCalc[index].P1}}</view>
-            <view class="score">({{scoreArray[index].P2}}){{scoreArrayCalc[index].P2}}</view>
-            <view class="score">({{scoreArray[index].P3}}){{scoreArrayCalc[index].P3}}</view>
-            <view class="score">({{scoreArray[index].P4}}){{scoreArrayCalc[index].P4}}</view>
+            <view class="score {{scoreArray[index].P1 === 0? 'win_bc': ''}}">({{scoreArray[index].P1}}){{scoreArrayCalc[index].P1}}</view>
+            <view class="score {{scoreArray[index].P2 === 0? 'win_bc': ''}}">({{scoreArray[index].P2}}){{scoreArrayCalc[index].P2}}</view>
+            <view class="score {{scoreArray[index].P3 === 0? 'win_bc': ''}}">({{scoreArray[index].P3}}){{scoreArrayCalc[index].P3}}</view>
+            <view class="score {{scoreArray[index].P4 === 0? 'win_bc': ''}}">({{scoreArray[index].P4}}){{scoreArrayCalc[index].P4}}</view>
         </view>
       </block>
     </scroll-view>
@@ -32,8 +32,8 @@
       </view>
     </view>
     <view class="section">
-      <view class="weui-cells__title">$</view>
-      <view class="btns-rows">
+      <view class="weui-cells__title">结算(单位:元)</view>
+      <view class="btns-rows money_bc">
         <block wx:for="{{totalMoney}}" wx:key="unique"> 
           <view class="score">{{item}}</view>
         </block>
@@ -63,7 +63,7 @@
     </radio-group>
 
     <view class="section">
-      <view class="weui-cells__title">确认无误后添加</view>
+      <view class="weui-cells__title">请确认无误后添加，数据添加后无法再更改</view>
       <view class="btns-rows">
         <button type="primary" bindtap="btnClicked">添加新的一轮</button>
         <button type="primary" plain="true" bindtap="resetData">重置</button>

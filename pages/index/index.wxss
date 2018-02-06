@@ -67,6 +67,12 @@
 .score:not(:last-child){
   border-right: 1px solid #c3c6c7;
 }
+.money_bc{
+  background-color: #11aa11;
+}
+.win_bc{
+  background-color: #11aa11;
+}
 
 .picker{
   padding: 19rpx 26rpx;
