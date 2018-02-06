@@ -3,38 +3,73 @@
   <view class="panel-display" style="position: relative;">
     <view class="panel-btns">
       <view class="btns-rows">
-        <view class="btn {{tapped['id']}}" bindtap="getScorelogs" bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="id">id</view>
-        <view class="btn {{tapped['6']}}" bindtap="btnClicked" bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="6">6</view>
-        <view class="btn {{tapped['7']}}" bindtap="btnClicked" bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="7">7</view>
-        <view class="btn {{tapped['8']}}" bindtap="btnClicked" bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="8">8</view>
-        <view class="btn {{tapped['9']}}" bindtap="btnClicked" bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="9">9</view>
-        
+        <view class="btn {{tapped['id']}}" bindtap="getScorelogs" bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="id">局数</view>
+        <view class="btn {{tapped['6']}}" bindtap="btnClicked" bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="6">峰</view>
+        <view class="btn {{tapped['7']}}" bindtap="btnClicked" bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="7">莉</view>
+        <view class="btn {{tapped['8']}}" bindtap="btnClicked" bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="8">肥</view>
+        <view class="btn {{tapped['9']}}" bindtap="clearStorage" bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="9">老板</view>
       </view>
     </view>
-    <view>
-      <text> </text>
-    </view>
-    <scroll-view scroll-y="true" style="height: 825rpx;">
+
+    <scroll-view scroll-y="true" style="height: 400rpx;" scroll-top="{{scrollTop}}">
       <block wx:for="{{scoreArray}}" wx:key="unique"> 
         <view class="btns-rows">
             <view class="score">{{item.id}}</view>
-            <view class="score">{{item.P1}}</view>
-            <view class="score">{{item.P2}}</view>
-            <view class="score">{{item.P3}}</view>
-            <view class="score">{{item.P4}}</view>
+            <view class="score">({{scoreArray[index].P1}}){{scoreArrayCalc[index].P1}}</view>
+            <view class="score">({{scoreArray[index].P2}}){{scoreArrayCalc[index].P2}}</view>
+            <view class="score">({{scoreArray[index].P3}}){{scoreArrayCalc[index].P3}}</view>
+            <view class="score">({{scoreArray[index].P4}}){{scoreArrayCalc[index].P4}}</view>
         </view>
       </block>
     </scroll-view>
+
+    <view class="section">
+      <view class="weui-cells__title">得分总和</view>
+      <view class="btns-rows">
+        <block wx:for="{{totalScore}}" wx:key="unique"> 
+          <view class="score">{{item}}</view>
+        </block>
+      </view>
+    </view>
+    <view class="section">
+      <view class="weui-cells__title">$</view>
+      <view class="btns-rows">
+        <block wx:for="{{totalMoney}}" wx:key="unique"> 
+          <view class="score">{{item}}</view>
+        </block>
+      </view>
+    </view>
     <view class="section">
       <view class="weui-cells__title">本局得分详情</view>
-        <picker mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
-        <view class="picker">
-          当前选择：{{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}，{{multiArray[2][multiIndex[2]]}}，{{multiArray[3][multiIndex[3]]}}
+      <picker mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
+        <view class="btns-rows">
+          <view class="score">{{multiArray[0][multiIndex[0]]}}</view>
+          <view class="score">{{multiArray[1][multiIndex[1]]}}</view>
+          <view class="score">{{multiArray[2][multiIndex[2]]}}</view>
+          <view class="score">{{multiArray[3][multiIndex[3]]}}</view>
         </view>
-        </picker>
-      </view>
-    <view>
-      <button type="primary" plain="true" bindtap="btnClicked">add new line</button>
+      </picker>
     </view>
+
+    <radio-group name="radio">
+      <view class="btns-rows">
+        <block wx:for="{{radioItems}}" wx:key="unique"> 
+          <label class="score">
+            <radio id="{{item.name}}" value="{{item.name}}" checked="{{item.checked}}" bindtap='radioTouched'></radio>
+            <text>x2</text>
+          </label>
+        </block>
+      </view>
+    </radio-group>
+
+    <view class="section">
+      <view class="weui-cells__title">确认无误后添加</view>
+      <view class="btns-rows">
+        <button type="primary" bindtap="btnClicked">添加新的一轮</button>
+        <button type="primary" plain="true" bindtap="resetData">重置</button>
+      </view>
+    </view>
+
   </view>
+  <modal title="{{dialog.title}}" hidden="{{dialog.hidden}}" no-cancel bindconfirm="confirm">{{dialog.content}}</modal>
 </view>
