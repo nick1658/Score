@@ -4,10 +4,9 @@
     <view class="panel-btns">
       <view class="btns-rows">
         <view class="btn {{tapped['id']}}" bindtap="getScorelogs" bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="id">局数</view>
-        <view class="btn {{tapped['6']}}" bindtap="btnClicked" bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="6">峰</view>
-        <view class="btn {{tapped['7']}}" bindtap="btnClicked" bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="7">莉</view>
-        <view class="btn {{tapped['8']}}" bindtap="btnClicked" bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="8">肥</view>
-        <view class="btn {{tapped['9']}}" bindtap="clearStorage" bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="9">老板</view>
+        <block wx:for="{{players}}" wx:key="unique">
+          <view class="btn" id="play0" >{{item}}</view>
+        </block>
       </view>
     </view>
 
@@ -15,10 +14,10 @@
       <block wx:for="{{scoreArray}}" wx:key="unique"> 
         <view class="btns-rows">
             <view class="score">{{item.id}}</view>
-            <view class="score {{scoreArray[index].P1 === 0? 'win_bc': ''}}">({{scoreArray[index].P1}}){{scoreArrayCalc[index].P1}}</view>
-            <view class="score {{scoreArray[index].P2 === 0? 'win_bc': ''}}">({{scoreArray[index].P2}}){{scoreArrayCalc[index].P2}}</view>
-            <view class="score {{scoreArray[index].P3 === 0? 'win_bc': ''}}">({{scoreArray[index].P3}}){{scoreArrayCalc[index].P3}}</view>
-            <view class="score {{scoreArray[index].P4 === 0? 'win_bc': ''}}">({{scoreArray[index].P4}}){{scoreArrayCalc[index].P4}}</view>
+            <view class="score {{item.P1 === 0? 'win_bc': scoreArrayCalc[index].X2 === 0? 'x2_bc':''}}">({{item.P1}}){{scoreArrayCalc[index].P1}}</view>
+            <view class="score {{item.P2 === 0? 'win_bc': scoreArrayCalc[index].X2 === 1? 'x2_bc':''}}">({{item.P2}}){{scoreArrayCalc[index].P2}}</view>
+            <view class="score {{item.P3 === 0? 'win_bc': scoreArrayCalc[index].X2 === 2? 'x2_bc':''}}">({{item.P3}}){{scoreArrayCalc[index].P3}}</view>
+            <view class="score {{item.P4 === 0? 'win_bc': scoreArrayCalc[index].X2 === 3? 'x2_bc':''}}">({{item.P4}}){{scoreArrayCalc[index].P4}}</view>
         </view>
       </block>
     </scroll-view>
@@ -31,25 +30,25 @@
         </block>
       </view>
     </view>
-    <view class="section">
-      <view class="weui-cells__title">结算(单位:元)</view>
-      <view class="btns-rows money_bc">
-        <block wx:for="{{totalMoney}}" wx:key="unique"> 
-          <view class="score">{{item}}</view>
-        </block>
-      </view>
-    </view>
-    <view class="section">
-      <view class="weui-cells__title">本局得分详情</view>
-      <picker mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
-        <view class="btns-rows">
-          <view class="score">{{multiArray[0][multiIndex[0]]}}</view>
-          <view class="score">{{multiArray[1][multiIndex[1]]}}</view>
-          <view class="score">{{multiArray[2][multiIndex[2]]}}</view>
-          <view class="score">{{multiArray[3][multiIndex[3]]}}</view>
+    <picker mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
+      <view class="section">
+        <view class="weui-cells__title">结算(单位:元)</view>
+        <view class="btns-rows money_bc">
+          <block wx:for="{{totalMoney}}" wx:key="unique"> 
+            <view class="score">{{item}}</view>
+          </block>
         </view>
-      </picker>
-    </view>
+      </view>
+      <view class="section">
+        <view class="weui-cells__title">本局得分详情</view>
+          <view class="btns-rows">
+            <view class="score">{{multiArray[0][multiIndex[0]]}}</view>
+            <view class="score">{{multiArray[1][multiIndex[1]]}}</view>
+            <view class="score">{{multiArray[2][multiIndex[2]]}}</view>
+            <view class="score">{{multiArray[3][multiIndex[3]]}}</view>
+          </view>
+      </view>
+    </picker>
 
     <radio-group name="radio">
       <view class="btns-rows">

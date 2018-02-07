@@ -73,6 +73,9 @@
 .win_bc{
   background-color: #11aa11;
 }
+.x2_bc{
+  background-color: #cccc00;
+}
 
 .picker{
   padding: 19rpx 26rpx;

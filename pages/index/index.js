@@ -1,9 +1,10 @@
 Page({
   data: {
-    calc: {},
+    players: ['峰', '莉', '肥', '老板'],
     tapped: {},
     scoreArray: [],
     scoreArrayCalc: [],
+    doubled: [],
     totalScore: [0, 0, 0, 0],
     totalMoney: [0, 0, 0, 0],
     multiIndex: [0, 0, 0, 0],
@@ -24,6 +25,9 @@ Page({
       { name: 'P3', value: '3', beChecked: false },
       { name: 'P4', value: '4', beChecked: false }
     ]
+  },
+  playerSet: function (e) {
+    console.log (e)
   },
   btnClicked: function (e) {
     const length = this.data.scoreArray.length;
@@ -78,6 +82,7 @@ Page({
         P3: p[2],
         P4: p[3]
       })
+      var doubled = -1;
       for (var i = 0; i < 4; ++i){
         if (p[i] < 8) {
 
@@ -90,6 +95,7 @@ Page({
         }
         if (this.data.radioItems[i].beChecked === true) {
           p[i] *= 2;
+          doubled = i;
         }
       }
       this.data.scoreArrayCalc.push({
@@ -97,10 +103,13 @@ Page({
         P1: p[0],
         P2: p[1],
         P3: p[2],
-        P4: p[3]
+        P4: p[3],
+        X2: doubled
       })
+
       var length_new = this.data.scoreArray.length;
       console.log ("当前数据长度" + length_new);
+      console.log (doubled)
       for (var i = 0; i < 4; ++i)
       {
         this.data.totalScore[i] += p[i]
@@ -150,7 +159,9 @@ Page({
   },
   btnTouchStart: function (e) {
     var code = e.target.dataset.op
+    console.log (e)
     var tapped = { [code]: 'active' }
+    console.log(tapped[code])
     this.setData({ tapped: tapped })
   },
   btnTouchEnd: function (e) {
