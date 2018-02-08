@@ -4,8 +4,8 @@
     <view class="panel-btns">
       <view class="btns-rows">
         <view class="btn {{tapped['id']}}"  bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="id">局数</view>
-        <block wx:for="{{players}}" wx:key="unique">
-          <view class="btn" id="play0" >{{item}}</view>
+        <block wx:for="{{players}}" wx:key="{{item.name}}">
+          <view class="btn" id="{{item.id}}" bindlongpress='changeName' >{{item.name}}</view>
         </block>
       </view>
     </view>
@@ -68,10 +68,36 @@
       <view class="weui-cells__title">请确认无误后添加，数据添加后无法再更改</view>
       <view class="btns-rows">
         <button type="primary" bindtap="btnClicked">添加新的一轮</button>
-        <button type="primary" plain="true" bindtap="resetData">重置</button>
+        <button type="primary" id = "clear" plain="true" bindtap="clearAll">重置</button>
       </view>
     </view>
 
   </view>
   <modal title="{{dialog.title}}" hidden="{{dialog.hidden}}" no-cancel bindconfirm="confirm">{{dialog.content}}</modal>
+
+  <!--弹窗-->
+  <view class="modal-mask" bindtap="hideModal" catchtouchmove="preventTouchMove" wx:if="{{showModal}}"></view>
+  <view class="modal-dialog" wx:if="{{showModal}}">
+    <view class="modal-title">更改名称</view>
+    <view class="modal-content">
+      <view class="modal-input">
+        <input placeholder-class="input-holder" type="number" maxlength="10" bindinput="inputChange" class="input" placeholder="请输名称"></input>
+      </view>
+    </view>
+    <view class="modal-footer">
+      <view class="btn-cancel" bindtap="onCancel" data-status="cancel">取消</view>
+      <view class="btn-confirm" bindtap="onConfirm" data-status="confirm">确定</view>
+    </view>
+  </view>
+  <!--弹窗-->
+  <view class="modal-mask" bindtap="hideModal" catchtouchmove="preventTouchMove" wx:if="{{showModalConfirm}}"></view>
+  <view class="modal-dialog" wx:if="{{showModalConfirm}}">
+    <view class="modal-title">确认清零</view>
+    <view class="modal-content">
+    </view>
+    <view class="modal-footer">
+      <view class="btn-cancel" bindtap="onCancel" data-status="cancel">取消</view>
+      <view class="btn-confirm" bindtap="onConfirm" data-status="confirm">确定</view>
+    </view>
+  </view>
 </view>

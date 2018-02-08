@@ -5,7 +5,7 @@ App({
     var logs = wx.getStorageSync('logs') || []
     logs.unshift(Date.now())
     //console.log(logs)
-    wx.setStorageSync('logs', logs)
+    //wx.setStorageSync('logs', logs)
 
     // 登录
     wx.login({

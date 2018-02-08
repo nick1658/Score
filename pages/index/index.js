@@ -2,7 +2,11 @@ const scoreCalc = require('../../utils/scoreCalc.js')
 
 Page({
   data: {
-    players: ['峰', '莉', '肥', '老板'],
+    showModal: false,
+    showModalConfirm:false,
+    chooseId:0,
+    inputv:'',
+    players: [{ id: 0, name: '峰' }, { id: 1, name: '莉' }, { id: 2, name: '肥' }, { id: 3, name: '老板' }],
     tapped: {},
     currentScore: [0, 0, 0, 0],
     scoreArray: [],
@@ -92,9 +96,12 @@ Page({
   //获取历史数据记录**************************************************
   getScorelogs: function () {
     var storageData
+    var players
     var that = this;
     storageData = wx.getStorageSync('scorelogs')
+    players = wx.getStorageSync('players')
     console.log('读取历史数据', 'storageData值为', storageData);
+    console.log('读取历史数据', 'players值为', players);
     if (storageData === "") {
       this.setData({
         'dialog.hidden': false,
@@ -113,8 +120,12 @@ Page({
         //console.log(this.data.currentScore)
         scoreCalc.testObj(this.data)
       }
+      if(players === ""){
+        players = [{ id: 0, name: 'play0' }, { id: 1, name: 'play1' }, { id: 2, name: 'play2' }, { id: 3, name: 'play3' }]
+      }
       this.setData({
         scoreArray: storageData,
+        players:players,
         scoreArrayCalc: this.data.scoreArrayCalc,
         totalMoney: this.data.totalMoney,
         totalScore: this.data.totalScore,
@@ -175,6 +186,14 @@ Page({
       multiIndex: [0, 0, 0, 0],
     })
   },
+  clearAll: function (e) {
+    this.setData({
+      showModalConfirm: true
+    })
+    this.data.chooseId = 10
+    console.log(this.data.chooseId)
+    //this.data.chooseId = e.target.id
+  },
   clearStorage: function () {
     wx.clearStorageSync()
   },
@@ -196,4 +215,61 @@ Page({
       wx.stopPullDownRefresh() //停止下拉刷新
     }, 0);
   },
+  /**
+   * 弹窗
+   */
+  changeName : function (e){
+    console.log (e.target.id)
+    this.data.chooseId = e.target.id
+    this.setData({
+      showModal: true
+    })
+  },
+  /**
+   * 弹出框蒙层截断touchmove事件
+   */
+  preventTouchMove: function () {
+  },
+  /**
+   * 隐藏模态对话框
+   */
+  hideModal: function () {
+    this.setData({
+      showModal: false,
+      showModalConfirm:false
+    });
+  },
+  /**
+   * 对话框取消按钮点击事件
+   */
+  onCancel: function (e) {
+    console.log(e)
+    this.hideModal();
+  },
+  /**
+   * 对话框确认按钮点击事件
+   */
+  onConfirm: function (e) {
+    console.log(this.data.chooseId)
+    if (this.data.chooseId < 9){
+      this.data.players[this.data.chooseId].name = this.data.inputv
+      wx.setStorageSync('players', this.data.players)
+      this.setData({
+        players: this.data.players
+      })
+    }else if (this.data.chooseId === 10){
+      this.setData({
+        totalMoney: [0, 0, 0, 0],
+        totalScore: [0, 0, 0, 0],
+        scoreArray: [],
+        scoreArrayCalc: []
+      })
+    }
+    this.hideModal();
+  },
+  inputChange:function (e) {
+    this.setData({
+      inputv: e.detail.value
+    })
+  }
 })
