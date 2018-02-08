@@ -3,7 +3,7 @@
   <view class="panel-display" style="position: relative;">
     <view class="panel-btns">
       <view class="btns-rows">
-        <view class="btn {{tapped['id']}}" bindtap="getScorelogs" bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="id">局数</view>
+        <view class="btn {{tapped['id']}}"  bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="id">局数</view>
         <block wx:for="{{players}}" wx:key="unique">
           <view class="btn" id="play0" >{{item}}</view>
         </block>
@@ -22,15 +22,17 @@
       </block>
     </scroll-view>
 
-    <view class="section">
-      <view class="weui-cells__title">得分总和</view>
-      <view class="btns-rows">
-        <block wx:for="{{totalScore}}" wx:key="unique"> 
-          <view class="score">{{item}}</view>
-        </block>
-      </view>
-    </view>
     <picker mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
+
+      <view class="section">
+        <view class="weui-cells__title">得分总和</view>
+        <view class="btns-rows">
+          <block wx:for="{{totalScore}}" wx:key="unique"> 
+            <view class="score">{{item}}</view>
+          </block>
+        </view>
+      </view>
+
       <view class="section">
         <view class="weui-cells__title">结算(单位:元)</view>
         <view class="btns-rows money_bc">
@@ -39,6 +41,7 @@
           </block>
         </view>
       </view>
+
       <view class="section">
         <view class="weui-cells__title">本局得分详情</view>
           <view class="btns-rows">
@@ -48,15 +51,15 @@
             <view class="score">{{multiArray[3][multiIndex[3]]}}</view>
           </view>
       </view>
+
     </picker>
 
     <radio-group name="radio">
       <view class="btns-rows">
         <block wx:for="{{radioItems}}" wx:key="unique"> 
-          <label class="score">
-            <radio id="{{item.name}}" value="{{item.name}}" checked="{{item.checked}}" bindtap='radioTouched'></radio>
-            <text>x2</text>
-          </label>
+          <view class="score">
+            <radio id="{{item.name}}" value="{{item.name}}" checked="{{item.checked}}" bindtap='radioTouched'>x2</radio>
+          </view>
         </block>
       </view>
     </radio-group>

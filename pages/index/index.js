@@ -1,10 +1,12 @@
+const scoreCalc = require('../../utils/scoreCalc.js')
+
 Page({
   data: {
     players: ['峰', '莉', '肥', '老板'],
     tapped: {},
+    currentScore: [0, 0, 0, 0],
     scoreArray: [],
     scoreArrayCalc: [],
-    doubled: [],
     totalScore: [0, 0, 0, 0],
     totalMoney: [0, 0, 0, 0],
     multiIndex: [0, 0, 0, 0],
@@ -30,115 +32,29 @@ Page({
     console.log (e)
   },
   btnClicked: function (e) {
-    const length = this.data.scoreArray.length;
     var data = {
       multiArray: this.data.multiArray,
       multiIndex: this.data.multiIndex
     };
     var that = this;
-    var isDataValid = 0;
+    var doubled = -1;
     for (var i = 0; i < 4; ++i) {
-      if (data.multiArray[i][data.multiIndex[i]] === 0) {
-        isDataValid += 1;
-        console.log(isDataValid);
+      this.data.currentScore[i] = data.multiArray[i][data.multiIndex[i]]
+      if (this.data.radioItems[i].beChecked === true) {
+        doubled = i;
       }
     }
+    this.data.currentScore[4] = doubled;
+    this.data.currentScore[5] = this.data.scoreArray.length;
 
-    switch (isDataValid) {
-      case 0:
-        console.log("至少要有一位赢家");
-        this.setData({
-          'dialog.hidden': false,
-          'dialog.title': '至少要有一位赢家',
-          //'dialog.content': "请重新设置分数"
-        })
-        break;
-      case 1:
-        console.log("合理的数据");
-        break;
-      case 2:
-      case 3:
-      case 4:
-        console.log("最多只能有一位赢家");
-        this.setData({
-          'dialog.hidden': false,
-          'dialog.title': '最多只能有一位赢家',
-          //'dialog.content': "请重新设置分数"
-        })
-        break;
-      default:
-        console.log("default");
-    }
-    if (isDataValid === 1){
-      var p = [];
-      p[0] = data.multiArray[0][data.multiIndex[0]];
-      p[1] = data.multiArray[1][data.multiIndex[1]];
-      p[2] = data.multiArray[2][data.multiIndex[2]];
-      p[3] = data.multiArray[3][data.multiIndex[3]];
-      this.data.scoreArray.push({
-        id: length + 1,
-        P1: p[0],
-        P2: p[1],
-        P3: p[2],
-        P4: p[3]
-      })
-      var doubled = -1;
-      for (var i = 0; i < 4; ++i){
-        if (p[i] < 8) {
-
-        }else if (p[i] < 10) {
-          p[i] *= 2;
-        } else if (p[i] < 13) {
-          p[i] *= 3;
-        }else{
-          p[i] *= 4;
-        }
-        if (this.data.radioItems[i].beChecked === true) {
-          p[i] *= 2;
-          doubled = i;
-        }
-      }
-      this.data.scoreArrayCalc.push({
-        id: length + 1,
-        P1: p[0],
-        P2: p[1],
-        P3: p[2],
-        P4: p[3],
-        X2: doubled
-      })
-
-      var length_new = this.data.scoreArray.length;
-      console.log ("当前数据长度" + length_new);
-      console.log (doubled)
-      for (var i = 0; i < 4; ++i)
-      {
-        this.data.totalScore[i] += p[i]
-      }
-      this.data.totalMoney[0] = (this.data.totalScore[1] + 
-        this.data.totalScore[2] + 
-        this.data.totalScore[3]) - this.data.totalScore[0] * 3;
-
-      this.data.totalMoney[1] = (this.data.totalScore[0] +
-        this.data.totalScore[2] +
-        this.data.totalScore[3]) - this.data.totalScore[1] * 3;
-
-      this.data.totalMoney[2] = (this.data.totalScore[0] +
-        this.data.totalScore[1] +
-        this.data.totalScore[3]) - this.data.totalScore[2] * 3;
-
-      this.data.totalMoney[3] = (this.data.totalScore[0] +
-        this.data.totalScore[1] +
-        this.data.totalScore[2]) - this.data.totalScore[3] * 3;
-
-      for (var i = 0; i < 4; ++i) {
-        this.data.totalMoney[i] /= 10;
-      }
+    if (scoreCalc.testObj(this.data) === true){
       this.resetData ()
       this.setData({
         totalMoney: this.data.totalMoney,
         totalScore: this.data.totalScore,
         scoreArray: this.data.scoreArray,
         scoreArrayCalc: this.data.scoreArrayCalc,
+        dialog: this.data.dialog,
       })
       setTimeout(function () {
         that.setData({
@@ -146,6 +62,10 @@ Page({
         });
       }, 0)
       wx.setStorageSync('scorelogs', this.data.scoreArray)
+    }else{
+      this.setData({
+        dialog: this.data.dialog,
+      })
     }
   },
   bindMultiPickerColumnChange: function (e) {
@@ -169,6 +89,7 @@ Page({
     var tapped = {}
     this.setData({ tapped: tapped })
   },
+  //获取历史数据记录**************************************************
   getScorelogs: function () {
     var storageData
     var that = this;
@@ -181,10 +102,24 @@ Page({
         'dialog.content': '没有历史分数'
       })
     } else {
+      var length = storageData.length
+      for (var i = 0; i < length; i++){
+        this.data.currentScore[0] = storageData[i].P1;
+        this.data.currentScore[1] = storageData[i].P2;
+        this.data.currentScore[2] = storageData[i].P3;
+        this.data.currentScore[3] = storageData[i].P4;
+        this.data.currentScore[4] = storageData[i].X2;
+        this.data.currentScore[5] = i;
+        //console.log(this.data.currentScore)
+        scoreCalc.testObj(this.data)
+      }
       this.setData({
         scoreArray: storageData,
+        scoreArrayCalc: this.data.scoreArrayCalc,
+        totalMoney: this.data.totalMoney,
+        totalScore: this.data.totalScore,
         'dialog.hidden': false,
-        'dialog.title': '读取数据成功',
+        'dialog.title': '读取历史记录成功',
         'dialog.content': "共有 " + storageData.length + " 条记录"
       })
       setTimeout(function () {
@@ -201,26 +136,13 @@ Page({
       'dialog.content': ''
     })
   },
-  radioChange: function (e) {
-    var checked = e.detail.value
-    var changed = {}
-    console.log(e)
-    for (var i = 0; i < this.data.radioItems.length; i++) {
-      if (checked.indexOf(this.data.radioItems[i].name) !== -1) {
-        changed['radioItems[' + i + '].checked'] = true
-      } else {
-        changed['radioItems[' + i + '].checked'] = false
-      }
-    }
-    this.setData(changed)
-    //console.log (changed)
-  },
+  //radio 加倍选项响应函数*****************************************************
   radioTouched: function (e) {
     var checked = e.target.id
     var changed = {}
 
     for (var i = 0; i < this.data.radioItems.length; i++) {
-      //console.log(this.data.radioItems[i].beChecked + '--' + i)
+      console.log(this.data.radioItems[i].beChecked + '--' + i)
       if (checked.indexOf(this.data.radioItems[i].name) !== -1) {
         if (this.data.radioItems[i].beChecked === false) {
           changed['radioItems[' + i + '].checked'] = true
@@ -234,7 +156,7 @@ Page({
         this.data.radioItems[i].beChecked = false
       }
 
-      //console.log(i + '--' + this.data.radioItems[i].beChecked)
+      console.log(i + '--' + this.data.radioItems[i].beChecked)
     }
     this.setData(changed)
     //console.log(changed)
@@ -255,5 +177,23 @@ Page({
   },
   clearStorage: function () {
     wx.clearStorageSync()
+  },
+  onShareAppMessage: function () {
+    return {
+      title: '微信小程序',
+      desc: '锄大地积分器',
+      path: '/pages/index'
+    }
+  }, 
+  onPullDownRefresh: function () {
+    wx.showNavigationBarLoading() //在标题栏中显示加载
+    console.log ("refresh")
+    this.getScorelogs();
+    //模拟加载
+    setTimeout(function () {
+      // complete
+      wx.hideNavigationBarLoading() //完成停止加载
+      wx.stopPullDownRefresh() //停止下拉刷新
+    }, 0);
   },
 })
