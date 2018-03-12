@@ -1,62 +1,89 @@
-
 <view class="container">
   <view class="panel-display" style="position: relative;">
     <view class="panel-btns">
       <view class="btns-rows">
-        <view class="btn {{tapped['id']}}"  bindtouchstart="btnTouchStart"  bindtouchend="btnTouchEnd"  data-op="id">局数</view>
+        <view class="btn {{tapped['id']}}" bindtouchstart="btnTouchStart" bindtouchend="btnTouchEnd" data-op="id">局数</view>
         <block wx:for="{{players}}" wx:key="{{item.name}}">
-          <view class="btn" id="{{item.id}}" bindlongpress='changeName' >{{item.name}}</view>
+          <view class="btn" id="{{item.id}}" bindlongpress='changeName'>{{item.name}}</view>
         </block>
       </view>
     </view>
 
     <scroll-view scroll-y="true" style="height: 400rpx;" scroll-top="{{scrollTop}}">
-      <block wx:for="{{scoreArray}}" wx:key="unique"> 
+      <view class="score" class= "weui-cells__title">
+        1、自动计算得分（0.1元/张）。
+        2、可设置黑桃2翻倍。
+        3、当前版本允许有1~3家赢。
+        4、玩家改名称请长按名称。
+        5、撤销可删除最后一轮记录。      
+        6、重置可清除所有数据。 
+        7、下拉恢复之前的记录。
+      </view>
+      <block wx:for="{{scoreArray}}" wx:key="unique">
         <view class="btns-rows">
-            <view class="score">{{item.id}}</view>
-            <view class="score {{item.P1 === 0? 'win_bc': scoreArrayCalc[index].X2 === 0? 'x2_bc':''}}">({{item.P1}}){{scoreArrayCalc[index].P1}}</view>
-            <view class="score {{item.P2 === 0? 'win_bc': scoreArrayCalc[index].X2 === 1? 'x2_bc':''}}">({{item.P2}}){{scoreArrayCalc[index].P2}}</view>
-            <view class="score {{item.P3 === 0? 'win_bc': scoreArrayCalc[index].X2 === 2? 'x2_bc':''}}">({{item.P3}}){{scoreArrayCalc[index].P3}}</view>
-            <view class="score {{item.P4 === 0? 'win_bc': scoreArrayCalc[index].X2 === 3? 'x2_bc':''}}">({{item.P4}}){{scoreArrayCalc[index].P4}}</view>
+          <view class="score">{{item.id+1}}</view>
+          <view class="score {{item.P1 === 0? 'win_bc': scoreArrayCalc[index].X2 === 0? 'x2_bc':''}}">({{item.P1}}){{scoreArrayCalc[index].P1}}</view>
+          <view class="score {{item.P2 === 0? 'win_bc': scoreArrayCalc[index].X2 === 1? 'x2_bc':''}}">({{item.P2}}){{scoreArrayCalc[index].P2}}</view>
+          <view class="score {{item.P3 === 0? 'win_bc': scoreArrayCalc[index].X2 === 2? 'x2_bc':''}}">({{item.P3}}){{scoreArrayCalc[index].P3}}</view>
+          <view class="score {{item.P4 === 0? 'win_bc': scoreArrayCalc[index].X2 === 3? 'x2_bc':''}}">({{item.P4}}){{scoreArrayCalc[index].P4}}</view>
         </view>
       </block>
     </scroll-view>
 
     <picker mode="multiSelector" bindchange="bindMultiPickerChange" bindcolumnchange="bindMultiPickerColumnChange" value="{{multiIndex}}" range="{{multiArray}}">
+      <view class="panel-btns">
+        <view class="weui-cells__title">统计详情</view>
+        <view class="btns-rows">
+          <view class="btn {{tapped['id']}}" bindtouchstart="btnTouchStart" bindtouchend="btnTouchEnd" data-op="id">玩家:</view>
+          <block wx:for="{{players}}" wx:key="{{item.name}}">
+            <view class="btn" id="{{item.id}}" bindlongpress='changeName'>{{item.name}}</view>
+          </block>
+        </view>
+      </view>
 
       <view class="section">
-        <view class="weui-cells__title">得分总和</view>
         <view class="btns-rows">
-          <block wx:for="{{totalScore}}" wx:key="unique"> 
+          <view class="score">总分:</view>
+          <block wx:for="{{totalScore}}" wx:key="unique">
             <view class="score">{{item}}</view>
           </block>
         </view>
       </view>
 
       <view class="section">
-        <view class="weui-cells__title">结算(单位:元)</view>
         <view class="btns-rows money_bc">
-          <block wx:for="{{totalMoney}}" wx:key="unique"> 
-            <view class="score">{{item}}</view>
+          <view class="score">结算:</view>
+          <block wx:for="{{totalMoney}}" wx:key="unique">
+            <view class="score ">{{item/10}}</view>
           </block>
         </view>
       </view>
 
       <view class="section">
         <view class="weui-cells__title">本局得分详情</view>
+        <view class="panel-btns">
           <view class="btns-rows">
-            <view class="score">{{multiArray[0][multiIndex[0]]}}</view>
-            <view class="score">{{multiArray[1][multiIndex[1]]}}</view>
-            <view class="score">{{multiArray[2][multiIndex[2]]}}</view>
-            <view class="score">{{multiArray[3][multiIndex[3]]}}</view>
+          <view class="score">玩家:</view>
+            <block wx:for="{{players}}" wx:key="{{item.name}}">
+              <view class="btn" id="{{item.id}}" bindlongpress='changeName'>{{item.name}}</view>
+            </block>
           </view>
+        </view>
+        <view class="btns-rows">
+          <view class="score">得分:</view>
+          <view class="score">{{multiArray[0][multiIndex[0]]}}</view>
+          <view class="score">{{multiArray[1][multiIndex[1]]}}</view>
+          <view class="score">{{multiArray[2][multiIndex[2]]}}</view>
+          <view class="score">{{multiArray[3][multiIndex[3]]}}</view>
+        </view>
       </view>
 
     </picker>
 
     <radio-group name="radio">
       <view class="btns-rows">
-        <block wx:for="{{radioItems}}" wx:key="unique"> 
+          <view class="score">翻倍:</view>
+        <block wx:for="{{radioItems}}" wx:key="unique">
           <view class="score">
             <radio id="{{item.name}}" value="{{item.name}}" checked="{{item.checked}}" bindtap='radioTouched'>x2</radio>
           </view>
@@ -65,39 +92,19 @@
     </radio-group>
 
     <view class="section">
-      <view class="weui-cells__title">请确认无误后添加，数据添加后无法再更改</view>
+      <view class="weui-cells__title">请确认无误后添加</view>
       <view class="btns-rows">
         <button type="primary" bindtap="btnClicked">添加新的一轮</button>
-        <button type="primary" id = "clear" plain="true" bindtap="clearAll">重置</button>
+        <button type="primary" id="undo" plain="true" bindtap="Undo">撤销</button>
+        <button type="primary" id="clear" plain="true" bindtap="clearAll">重置</button>
       </view>
     </view>
 
-  </view>
-  <modal title="{{dialog.title}}" hidden="{{dialog.hidden}}" no-cancel bindconfirm="confirm">{{dialog.content}}</modal>
+    <modal title="{{dialog.title}}" hidden="{{dialog.hidden}}" no-cancel catchtouchmove="preventD" bindconfirm="confirm">{{dialog.content}}</modal>
+    <!--弹窗-->
+    <inputDialog id="undo" modal-hidden="{{!undoConfirm}}" title="撤销最后一轮" no-input bindret="inputDialogRet" catchmove="preventD" />
+    <inputDialog id="clearAll" modal-hidden="{{!showModalConfirm}}" title="确认全部清零" no-input bindret="inputDialogRet" catchmove="preventD" />
+    <inputDialog id="changeName" modal-hidden="{{!showModal}}" title="修改名称" tip-msg="请输入名称" bindret="inputDialogRet" bindinput="inputChange" />
 
-  <!--弹窗-->
-  <view class="modal-mask" bindtap="hideModal" catchtouchmove="preventTouchMove" wx:if="{{showModal}}"></view>
-  <view class="modal-dialog" wx:if="{{showModal}}">
-    <view class="modal-title">更改名称</view>
-    <view class="modal-content">
-      <view class="modal-input">
-        <input placeholder-class="input-holder" type="number" maxlength="10" bindinput="inputChange" class="input" placeholder="请输名称"></input>
-      </view>
-    </view>
-    <view class="modal-footer">
-      <view class="btn-cancel" bindtap="onCancel" data-status="cancel">取消</view>
-      <view class="btn-confirm" bindtap="onConfirm" data-status="confirm">确定</view>
-    </view>
-  </view>
-  <!--弹窗-->
-  <view class="modal-mask" bindtap="hideModal" catchtouchmove="preventTouchMove" wx:if="{{showModalConfirm}}"></view>
-  <view class="modal-dialog" wx:if="{{showModalConfirm}}">
-    <view class="modal-title">确认清零</view>
-    <view class="modal-content">
-    </view>
-    <view class="modal-footer">
-      <view class="btn-cancel" bindtap="onCancel" data-status="cancel">取消</view>
-      <view class="btn-confirm" bindtap="onConfirm" data-status="confirm">确定</view>
-    </view>
   </view>
 </view>

@@ -1,4 +1,7 @@
 {
+  "usingComponents": {
+    "inputDialog": "../components/inputDialog/inputDialog"
+  },
   "navigationBarTitleText": "锄大地积分器",
   "enablePullDownRefresh": true
 }

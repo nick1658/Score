@@ -1,0 +1,17 @@
+<!--pages/components/inputDialog/inputDialog.wxml-->
+<view hidden='{{modalHidden}}' catchtouchmove="_preventTouchMove">
+  <view class='modal-mask' catchtouchmove="_preventTouchMove"/>
+  <view class='modal-dialog'>
+    <view class="modal-title">{{title}}</view>
+    <view class='modal-content'>
+      <text class='modalMsg'><slot></slot></text>
+      <view class="modal-input" wx:if="{{!noInput}}">
+        <input placeholder-class="input-holder" value="{{inputText}}" maxlength="10" bindinput="_inputChange" class="input" placeholder="{{tipMsg}}"></input>
+      </view>
+    </view>
+    <view class='modal-footer'>
+      <view bindtap='Cancel' class='btn-cancel'>取消</view>
+      <view bindtap='Ok' class='btn-confirm'>确定</view>
+    </view>
+  </view>
+</view>
